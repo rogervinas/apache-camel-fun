@@ -4,15 +4,24 @@
 
 ## Before Having Fun
 
-http://camel.apache.org/
+What is Camel? *- Jonathan Anstey at [DZone](https://dzone.com/articles/open-source-integration-apache)*
 
- * [Integration patterns](http://camel.apache.org/enterprise-integration-patterns.html)
- * [Components](http://camel.apache.org/components.html)
- * [Languages](http://camel.apache.org/languages.html)
- * [Error handling](http://camel.apache.org/error-handling-in-camel.html)
- * [Testing](http://camel.apache.org/testing.html)
- * [Examples](https://github.com/apache/camel/tree/master/examples)
- * [Source Code](https://github.com/apache/camel/tree/master)
+Apache Camel is an open source Java framework that focuses on making integration easier and more accessible to developers. It does this by providing:
+
+* Concrete implementations of all the widely used EIPs.
+* Connectivity to a great variety of transports and APIs.
+* Easy to use Domain Specific Languages (DSLs) to wire EIPs and transports together.
+
+Useful links:
+
+* [What is Camel](http://camel.apache.org/what-is-camel.html)
+* [Integration patterns](http://camel.apache.org/enterprise-integration-patterns.html)
+* [Components](http://camel.apache.org/components.html)
+* [Languages](http://camel.apache.org/languages.html)
+* [Error handling](http://camel.apache.org/error-handling-in-camel.html)
+* [Testing](http://camel.apache.org/testing.html)
+* [Examples](https://github.com/apache/camel/tree/master/examples)
+* [Source Code](https://github.com/apache/camel/tree/master)
 
 ## Fun Use Case #1
 
