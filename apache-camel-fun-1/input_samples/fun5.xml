@@ -1,0 +1,17 @@
+<UserQuotes>
+  <UserQuote Id="4" Name="Cersei" Surname="Lannister">
+    <Quote>If you ever call me 'sister' again, I'll have you strangled in your sleep</Quote>
+  </UserQuote>
+  <UserQuote Id="5" Name="Jon" Surname="Snow">
+    <Quote>Stick 'em with the pointy end</Quote>
+  </UserQuote>
+  <UserQuote Id="6" Name="Tywin" Surname="Lannister">
+    <Quote>A lion doesn't concern himself with the opinions of a sheep</Quote>
+  </UserQuote>
+  <UserQuote Id="7" Name="Ned" Surname="Stark">
+    <Quote>Winter is coming</Quote>
+  </UserQuote>
+  <UserQuote Id="8" Name="Tyrion" Surname="Lannister">
+    <Quote>Let me give you some advice, bastard. Never forget what you are. The rest of the world will not. Wear it like armor, and it can never be used to hurt you</Quote>
+  </UserQuote>
+</UserQuotes>

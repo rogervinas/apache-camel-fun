@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: "apache-camel-fun-1"
+
+file:
+  path: "input"
+  delay: 1000
+
+kafka:
+  host: "localhost"
+  port: "9092"
+  topic: "pub.user.quotes"
+
+ftp:
+  host: "localhost"
+  port: "2121"
+  user: "user"
+  pass: "fun"
+  path: "events"

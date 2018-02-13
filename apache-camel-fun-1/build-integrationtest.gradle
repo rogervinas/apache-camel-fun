@@ -1,0 +1,36 @@
+apply plugin: 'docker-compose'
+
+configurations {
+    integrationtestCompile.extendsFrom testCompile
+    integrationtestRuntime.extendsFrom testRuntime
+}
+
+sourceSets {
+    integrationtest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integration-test/java')
+        }
+        resources.srcDir file('src/integration-test/resources')
+    }
+}
+
+task integrationTest(type: Test) {
+    testClassesDir = sourceSets.integrationtest.output.classesDir
+    classpath = sourceSets.integrationtest.runtimeClasspath
+}
+
+dockerCompose.isRequiredBy(integrationTest)
+
+dockerCompose {
+    useComposeFiles = ['../docker-compose.yml']
+    startedServices = [ 'ftp', 'kafka', 'zookeeper' ]
+    waitForTcpPorts = false
+    captureContainersOutput = false
+    stopContainers = true
+    removeContainers = true
+    removeOrphans = true
+}
+
+integrationTest.mustRunAfter test

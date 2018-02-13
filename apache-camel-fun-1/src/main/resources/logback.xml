@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date{ISO8601,GMT} %highlight(%5p) %cyan(%-30.30logger) : %m%n</pattern>
+            <charset>utf8</charset>
+        </encoder>
+        <withJansi>true</withJansi>
+    </appender>
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>

@@ -1,0 +1,32 @@
+<UserQuotes>
+  <UserQuote Id="9" Name="Daenerys" Surname="Targaryen">
+    <Quote>The next time you raise a hand to me will be the last time you have hands</Quote>
+  </UserQuote>
+  <UserQuote Id="10" Name="Tyrion" Surname="Lannister">
+    <Quote>It's easy to confuse 'what is' with 'what ought to be', especially when 'what is' has worked out in your favor</Quote>
+  </UserQuote>
+  <UserQuote Id="11" Name="Cersei" Surname="Lannister">
+    <Quote>When you play the game of thrones, you win or you die</Quote>
+  </UserQuote>
+  <UserQuote Id="12" Name="Brienne" Surname="of Tarth">
+    <Quote>In the name of Renly of House Baratheon, First of His Name, Rightful King of the Andals and the First Men, Lord of the Seven Kingdoms and Protector of the Realm, I, Brienne of Tarth, sentence you to die</Quote>
+  </UserQuote>
+  <UserQuote Id="13" Name="Ramsay" Surname="Bolton">
+    <Quote>If you think this has a happy ending, you haven't been paying attention</Quote>
+  </UserQuote>
+  <UserQuote Id="14" Name="Tyrion" Surname="Lannister">
+    <Quote>That's what I do. I drink and I know things</Quote>
+  </UserQuote>
+  <UserQuote Id="15" Name="Ygritte" Surname="">
+    <Quote>You know nothing, Jon Snow</Quote>
+  </UserQuote>
+  <UserQuote Id="16" Name="Jaime" Surname="Lannister">
+    <Quote>The things I do for love</Quote>
+  </UserQuote>
+  <UserQuote Id="17" Name="Melisandre" Surname="of Asshai">
+    <Quote>The night is dark and full of terrors</Quote>
+  </UserQuote>
+  <UserQuote Id="18" Name="Lord" Surname="Varys">
+    <Quote>Power resides where men believe it resides. It's a trick. A shadow on the wall. And a very small man can cast a very large shadow</Quote>
+  </UserQuote>
+</UserQuotes>
