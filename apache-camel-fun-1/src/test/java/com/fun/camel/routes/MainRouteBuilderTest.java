@@ -17,6 +17,7 @@
 package com.fun.camel.routes;
 
 import org.apache.camel.CamelContext;
+import org.apache.camel.CamelExecutionException;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
 import org.apache.camel.Produce;
@@ -46,6 +47,7 @@ import static com.fun.camel.helpers.JSONHelper.jsonUserQuote;
 import static com.fun.camel.helpers.XMLHelper.xmlUserQuote;
 import static com.fun.camel.helpers.XMLHelper.xmlUserQuotes;
 import static com.fun.camel.helpers.ZIPHelper.zip;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(CamelSpringRunner.class)
 @ContextConfiguration(classes = {MainRouteBuilderTest.TestConfiguration.class}, loader = CamelSpringDelegatingTestContextLoader.class)
@@ -84,39 +86,42 @@ public class MainRouteBuilderTest {
     }
 
     @Test
-    public void test_file_with_no_UserQuotes() throws Exception {
-        ftpEndpoint.expectedMessageCount(0);
+    public void should_process_file_with_no_UserQuotes() throws Exception {
+
         kafkaEndpoint.expectedMessageCount(0);
+        ftpEndpoint.expectedMessageCount(0);
 
         String xml = xmlUserQuotes();
         byte[] zip = zip("file0.xml", xml);
         fromFile.sendBodyAndHeaders(zip, headers);
 
-        ftpEndpoint.assertIsSatisfied();
         kafkaEndpoint.assertIsSatisfied();
+        ftpEndpoint.assertIsSatisfied();
     }
 
     @Test
-    public void test_file_with_one_UserQuote() throws Exception {
+    public void should_process_file_with_one_UserQuote() throws Exception {
+
         String name = "Sam";
         String surname = "Trautman";
         String quote = "I didn't come to rescue Rambo from you";
         int id = 13;
         String json = jsonUserQuote(id, name + " " + surname, quote);
 
-        ftpEndpoint.expectedBodiesReceived(json);
         kafkaEndpoint.expectedBodiesReceived(json);
+        ftpEndpoint.expectedBodiesReceived(json);
 
         String xml = xmlUserQuotes(xmlUserQuote(id, name, surname, quote));
         byte[] zip = zip("file1.xml", xml);
         fromFile.sendBodyAndHeaders(zip, headers);
 
-        ftpEndpoint.assertIsSatisfied();
         kafkaEndpoint.assertIsSatisfied();
+        ftpEndpoint.assertIsSatisfied();
     }
 
     @Test
-    public void test_file_with_three_UserQuotes() throws Exception {
+    public void should_process_file_with_three_UserQuotes() throws Exception {
+
         String name1 = "Sam";
         String surname1 = "Trautman";
         String quote1 = "I didn't come to rescue Rambo from you. I came here to rescue you from him";
@@ -135,8 +140,8 @@ public class MainRouteBuilderTest {
         int id3 = 183;
         String json3 = jsonUserQuote(id3, name3 + " " + surname3, quote3);
 
-        ftpEndpoint.expectedBodiesReceivedInAnyOrder(json1, json2, json3);
         kafkaEndpoint.expectedBodiesReceivedInAnyOrder(json1, json2, json3);
+        ftpEndpoint.expectedBodiesReceivedInAnyOrder(json1, json2, json3);
 
         String xml = xmlUserQuotes(
                 xmlUserQuote(id1, name1, surname1, quote1),
@@ -146,8 +151,64 @@ public class MainRouteBuilderTest {
         byte[] zip = zip("file3.xml", xml);
         fromFile.sendBodyAndHeaders(zip, headers);
 
-        ftpEndpoint.assertIsSatisfied();
         kafkaEndpoint.assertIsSatisfied();
+        ftpEndpoint.assertIsSatisfied();
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void should_fail_when_exception_on_kafka() throws Throwable {
+
+        String name = "Will";
+        String surname = "Teasle";
+        String quote = "Are you telling me that 200 of our men against your boy is a no-win situation for us?";
+        int id = 148;
+        String json = jsonUserQuote(id, name + " " + surname, quote);
+
+        RuntimeException unexpectedException = new RuntimeException("You send that many, don't forget a good supply of body bags");
+        kafkaEndpoint.whenAnyExchangeReceived(exchange -> { throw unexpectedException; });
+        kafkaEndpoint.expectedBodiesReceived(json);
+        ftpEndpoint.expectedBodiesReceived(json);
+
+        sendAndassertCamelExceptionIsThrown(name, surname, quote, id, unexpectedException);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void should_fail_when_exception_on_ftp() throws Throwable {
+
+        String name = "Sam";
+        String surname = "Trautman";
+        String quote = "Well you did some pushing on your own John";
+        int id = 275;
+        String json = jsonUserQuote(id, name + " " + surname, quote);
+
+        RuntimeException unexpectedException = new RuntimeException("They drew first blood, not me");
+        kafkaEndpoint.expectedBodiesReceived(json);
+        ftpEndpoint.whenAnyExchangeReceived(exchange -> { throw unexpectedException; });
+        ftpEndpoint.expectedBodiesReceived(json);
+
+        sendAndassertCamelExceptionIsThrown(name, surname, quote, id, unexpectedException);
+    }
+
+    private void sendAndassertCamelExceptionIsThrown(
+            String name,
+            String surname,
+            String quote,
+            int id,
+            RuntimeException unexpectedException
+    ) throws Throwable {
+        try {
+            String xml = xmlUserQuotes(xmlUserQuote(id, name, surname, quote));
+            byte[] zip = zip("fileX.xml", xml);
+            fromFile.sendBodyAndHeaders(zip, headers);
+        } catch(CamelExecutionException camelException) {
+            assertThat(camelException.getCause())
+                    .isEqualTo(unexpectedException);
+
+            kafkaEndpoint.assertIsSatisfied();
+            ftpEndpoint.assertIsSatisfied();
+
+            throw camelException.getCause();
+        }
     }
 
     @Configuration

@@ -34,7 +34,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.time.Duration;
+import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.fun.camel.helpers.JSONHelper.jsonUserQuote;
 
@@ -50,12 +54,16 @@ public class FtpRouteBuilderTest {
     @EndpointInject(uri = "mock:ftp:localhost:666/path")
     private MockEndpoint ftpEndpoint;
 
+    private static Duration ftpRetryDelay = Duration.ofMillis(500);
+    private static int ftpRetryCount = 10;
+
     @Test
-    public void test() throws InterruptedException {
-        String user = "Johnny Utah";
-        String quote = "Vaya con Dios";
-        String filename = "johnny-utah-58.json";
-        String json = jsonUserQuote(58, user, quote);
+    public void should_send_once_when_no_exception() throws InterruptedException {
+
+        String user = "Jim Lovell";
+        String quote = "Gentlemen, it's been a privilege flying with you";
+        String filename = "jim-lovell-143.json";
+        String json = jsonUserQuote(143, user, quote);
 
         ftpEndpoint.expectedBodiesReceived(json);
         ftpEndpoint.expectedHeaderReceived(Exchange.FILE_NAME, filename);
@@ -65,11 +73,32 @@ public class FtpRouteBuilderTest {
         ftpEndpoint.assertIsSatisfied();
     }
 
+    @Test
+    public void should_send_no_more_than_retry_count_times_when_unexpected_exception() throws InterruptedException {
+
+        String user = "Ken Mattingly";
+        String quote = "13, this is Houston, do you read?";
+        String filename = "ken-mattingly-72.json";
+        String json = jsonUserQuote(72, user, quote);
+
+        RuntimeException unexpectedException = new RuntimeException("Houston we have a problem");
+        ftpEndpoint.whenAnyExchangeReceived(exchange -> { throw unexpectedException; });
+
+        // 1 try + N retries
+        List<String> jsons = repeat(json, 1 + ftpRetryCount);
+        ftpEndpoint.expectedBodiesReceived(jsons);
+        ftpEndpoint.expectedHeaderReceived(Exchange.FILE_NAME, filename);
+
+        fromDirect.requestBody(json);
+
+        ftpEndpoint.assertIsSatisfied();
+    }
+
     @Configuration
     public static class TestConfiguration extends SingleRouteCamelConfiguration {
         @Override
         public RouteBuilder route() {
-            return new FtpRouteBuilder();
+            return new FtpRouteBuilder(ftpRetryDelay.toString(), ftpRetryCount);
         }
 
         @Bean
@@ -84,5 +113,11 @@ public class FtpRouteBuilderTest {
             propertiesComponent.setInitialProperties(properties);
             return propertiesComponent;
         }
+    }
+
+    private <T> List<T> repeat(T value, int count) {
+        return IntStream.range(0, count)
+                .mapToObj(i -> value)
+                .collect(Collectors.toList());
     }
 }

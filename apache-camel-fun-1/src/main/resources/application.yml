@@ -17,3 +17,6 @@ ftp:
   user: "user"
   pass: "fun"
   path: "events"
+  retry:
+    delay: "PT5S"
+    count: 5
