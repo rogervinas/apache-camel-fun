@@ -18,6 +18,7 @@ Useful links:
 * [Integration patterns](http://camel.apache.org/enterprise-integration-patterns.html)
 * [Components](http://camel.apache.org/components.html)
 * [Languages](http://camel.apache.org/languages.html)
+* [Type Converters](http://camel.apache.org/type-converter.html)
 * [Error handling](http://camel.apache.org/error-handling-in-camel.html)
 * [Testing](http://camel.apache.org/testing.html)
 * [Examples](https://github.com/apache/camel/tree/master/examples)
