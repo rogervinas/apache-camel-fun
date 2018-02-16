@@ -13,8 +13,8 @@ public class FtpRouteBuilder extends RouteBuilder {
     private final int retryCount;
 
     public FtpRouteBuilder(
-            @Value("ftp.retry.delay") String retryDelay,
-            @Value("ftp.retry.count") int retryCount
+            @Value("${ftp.retry.delay}") String retryDelay,
+            @Value("${ftp.retry.count}") int retryCount
     ) {
         this.retryDelay = Duration.parse(retryDelay);
         this.retryCount = retryCount;
