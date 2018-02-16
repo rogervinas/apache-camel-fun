@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: "apache-camel-fun-2"
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/postgres"
+    username: "user"
+    password: "fun"
+    driver-class-name: "org.postgresql.Driver"
+
+kafka:
+  host: "localhost"
+  port: "9092"
+  topic: "pub.user.quotes"
+  groupId: "${spring.application.name}"
+  consumersCount: 1
+  consumerStreams: 1
+
+s3:
+  endpoint: "http://localhost:8030"
+  region: "eu-west-1"
+  bucket: "fun"
+  credentials:
+    accessKey: "accessKey1"
+    secretKey: "verySecretKey1"

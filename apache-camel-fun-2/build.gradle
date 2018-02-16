@@ -1,0 +1,48 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.10.RELEASE'
+		camelVersion = '2.20.2'
+	}
+	repositories {
+		mavenCentral()
+		jcenter()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("com.avast.gradle:gradle-docker-compose-plugin:0.6.14")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+
+apply from: 'build-integrationtest.gradle'
+
+group = 'com.fun.camel'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile("org.springframework.boot:spring-boot-starter")
+	compile("org.apache.camel:camel-spring-boot-starter:${camelVersion}")
+	compile("org.apache.camel:camel-spring-javaconfig:${camelVersion}")
+	compile("org.apache.camel:camel-kafka:${camelVersion}")
+	compile("org.apache.camel:camel-jsonpath:${camelVersion}")
+	compile("org.apache.camel:camel-aws:${camelVersion}")
+	compile("org.apache.camel:camel-script:${camelVersion}")
+	compile("org.apache.camel:camel-jackson:${camelVersion}")
+	compile("org.apache.camel:camel-sql:${camelVersion}")
+
+	compile("org.springframework.boot:spring-boot-starter-jdbc")
+	compile("org.apache.commons:commons-dbcp2:2.1.1")
+	compile("org.apache.commons:commons-pool2:2.4.2")
+	compile("org.postgresql:postgresql:42.1.1")
+
+	testCompile("org.springframework.boot:spring-boot-starter-test")
+	testCompile("org.apache.camel:camel-test-spring:${camelVersion}")
+}
