@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class KafkaRouteBuilder extends RouteBuilder {
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
         from("direct:kafka")
                 .log("No route no fun!");
     }
