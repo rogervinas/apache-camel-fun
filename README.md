@@ -12,6 +12,24 @@ Apache Camel is an open source Java framework that focuses on making integration
 * Connectivity to a great variety of transports and APIs.
 * Easy to use Domain Specific Languages (DSLs) to wire EIPs and transports together.
 
+All is about Routes, Components and Exchanges:
+
+* Routes:
+A route defines the workflow an Exchange will have to follow.
+A route starts using a Component consumer (the **from**) and then can apply any set of EIP's and invoke any set of Component producers (the **to**'s)
+
+* Components:
+A Component provides two implementations: a consumer and a producer
+A Component consumer is placed at the **from** of a route and generates Exchanges every time its own logic is triggered, usually receiving data from an external source.
+A Component producer is placed at a **to** of a route and sends data of the incoming Exchange to usually an external sink.
+
+* Exchanges
+An Exchange is the data circulating across a route, containing:
+** A message in : a body (anything) and some headers (list of key+value)
+** A message out : a body (anything) and some headers (list of key+value)
+** Properties : list of key+value
+At any step of a route message in is transformed to a message out which will be the message in for the next step.
+
 Useful links:
 
 * [What is Camel](http://camel.apache.org/what-is-camel.html)
